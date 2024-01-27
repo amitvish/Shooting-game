@@ -22,6 +22,7 @@ let fallingBalls = [];
 let fallingBallFrequency = 100;
 let frameCount = 0;
 let gameRunning = true;
+let score = 0;
 
 document.getElementById('restartButton').addEventListener('click', restartGame);
 
@@ -80,6 +81,7 @@ function drawFallingBalls() {
             if (isColliding(shooterBall, ball)) {
                 fallingBalls.splice(index, 1);
                 balls.splice(shooterBallIndex, 1);
+                score++;
             }
         });
 
@@ -110,6 +112,7 @@ function restartGame() {
     balls = [];
     fallingBalls = [];
     frameCount = 0;
+    score = 0;
     gameRunning = true;
     document.getElementById('restartButton').style.display = 'none';
     updateGame();
@@ -119,7 +122,9 @@ function updateGame() {
     if (!gameRunning) {
         ctx.font = '40px Arial';
         ctx.fillStyle = 'red';
-        ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
+        ctx.fillText('Game Over!', canvas.width / 2 - 100, canvas.height / 2);
+        ctx.fillStyle = 'black';
+        ctx.fillText('Your Score: ' + score, canvas.width / 2 - 100, canvas.height / 2 + 50);
         document.getElementById('restartButton').style.display = 'block';
         return;
     }
@@ -133,6 +138,10 @@ function updateGame() {
     drawShooter();
     drawBalls();
     drawFallingBalls();
+
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+    ctx.fillText('Score: ' + score, 10, 30);
 
     frameCount++;
     if (frameCount % fallingBallFrequency === 0) {
