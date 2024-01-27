@@ -17,11 +17,13 @@ let keys = {
     Space: false
 };
 
-let balls = []; // Balls shot by the shooter
-let fallingBalls = []; // Balls falling from the top
+let balls = [];
+let fallingBalls = [];
 let fallingBallFrequency = 100;
 let frameCount = 0;
 let gameRunning = true;
+
+document.getElementById('restartButton').addEventListener('click', restartGame);
 
 function drawShooter() {
     ctx.fillStyle = 'blue';
@@ -83,7 +85,7 @@ function drawFallingBalls() {
 
         if (ball.y > canvas.height) {
             fallingBalls.splice(index, 1);
-            gameRunning = false; // Stop the game
+            gameRunning = false;
         }
     });
 }
@@ -104,19 +106,29 @@ function updateShooterPosition() {
     }
 }
 
+function restartGame() {
+    balls = [];
+    fallingBalls = [];
+    frameCount = 0;
+    gameRunning = true;
+    document.getElementById('restartButton').style.display = 'none';
+    updateGame();
+}
+
 function updateGame() {
     if (!gameRunning) {
         ctx.font = '40px Arial';
         ctx.fillStyle = 'red';
         ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
-        return; // Stop the game loop
+        document.getElementById('restartButton').style.display = 'block';
+        return;
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateShooterPosition();
     if (keys.Space) {
         shootBall();
-        keys.Space = false; // Prevent continuous shooting
+        keys.Space = false;
     }
     drawShooter();
     drawBalls();
